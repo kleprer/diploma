@@ -3,6 +3,7 @@
     "module": "CommonJS",
     "target": "ES2020",
     "types": ["node"],
+    "rootDir": "./src",
 
 
     // Other Outputs
@@ -10,7 +11,7 @@
 
     // Recommended Options
     "strict": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",

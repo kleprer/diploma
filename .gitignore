@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Environment variables (если будете хранить какие-то ключи/настройки)
+.env
+.env.local
+
+# Логи
+*.log
+npm-debug.log*
+
+# OS-специфичные файлы
+Thumbs.db
+.DS_Store
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.code-workspace
+
+# TypeScript
+*.tsbuildinfo
