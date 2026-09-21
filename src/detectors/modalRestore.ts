@@ -15,7 +15,7 @@ export async function checkModalScenario(
     const trigger = page.locator(triggerSelector).first();
     if ((await trigger.count()) === 0) return { verdict: 'error', details: 'selector_not_found' };
     
-    await trigger.evaluate((el) => el.setAttribute('data-kdb-trigger', '1'));
+    await trigger.evaluate((el) => el.setAttribute('data-kbd-trigger', '1'));
     await trigger.focus();
     await page.keyboard.press('Enter');
     await waitForFocusToSettle(page);
@@ -60,6 +60,11 @@ export async function checkModalScenario(
     }
   
     // критерий 3: фокус вернулся на триггер
+    console.log('DEBUG', await page.evaluate(() => ({
+        active: document.activeElement?.outerHTML.slice(0, 80),
+        triggerFound: !!document.querySelector('[data-kbd-trigger]'),
+    })));
+    
     const restored = await page.evaluate(() => {
         const t = document.querySelector('[data-kbd-trigger]');
         return !!t && t === document.activeElement;

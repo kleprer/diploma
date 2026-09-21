@@ -1,0 +1,16 @@
+[
+  {
+    "name": "RealWorld Conduit",
+    "url": "http://localhost:4100",
+    "repo": "https://github.com/gothinkster/react-redux-realworld-example-app",
+    "modalTriggers": [],
+    "listSelector": ".article-preview"
+  },
+  {
+    "name": "React-Admin Demo",
+    "url": "http://localhost:3000",
+    "repo": "https://github.com/marmelab/react-admin",
+    "modalTriggers": ["[aria-label='Edit']"],
+    "listSelector": ".RaDatagrid-row"
+  }
+]

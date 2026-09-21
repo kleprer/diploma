@@ -38,16 +38,17 @@ export async function waitForFocusToSettle(
         let last = document.activeElement;
         const start = performance.now();
         let lastChange = start;
-        const tick = () => {
+        const timer = setInterval(() => {
           const now = performance.now();
           if (document.activeElement !== last) {
             last = document.activeElement;
             lastChange = now;
           }
-          if (now - lastChange >= quietMs || now - start >= timeoutMs) resolve();
-          else setTimeout(tick, 50);
-        };
-        tick();
+          if (now - lastChange >= quietMs || now - start >= timeoutMs) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, 50);
       }),
     { quietMs, timeoutMs }
   );

@@ -57,23 +57,47 @@ export async function checkDynamicScenario(
   // критерий 1: фокус не потерялся при подгрузке
   if (snap.isBody || !snap.isConnected) {
     types.push('focus_lost_after_load');
-  } else {
+    } else {
     // критерий 2: порядок tab по элементам списка не прыгает назад
-    const seq: number[] = [];
-    const budget = (countAfter - countBefore) * 3 + 5;
-    for (let i = 0; i < budget; i++) {
-      await page.keyboard.press('Tab');
-      const idx = await page.evaluate((sel) => {
-        const items = Array.from(document.querySelectorAll(sel));
-        const a = document.activeElement;
-        return items.findIndex((it) => it === a || it.contains(a));
-      }, itemSelector);
-      if (idx !== -1) seq.push(idx);
-    }
-    for (let i = 1; i < seq.length; i++) {
-      if (seq[i] < seq[i - 1]) {
-        types.push('tab_order_not_monotonic');
-        break;
+    // идём от первого элемента и останавливаемся на последнем, иначе tab
+    // зациклится на начало страницы и даст ложное нарушение
+    const started = await page.evaluate(
+      ({ sel, focusable }) => {
+        const first = document.querySelector(sel) as HTMLElement | null;
+        if (!first) return false;
+        const f = first.matches(focusable)
+          ? first
+          : (first.querySelector(focusable) as HTMLElement | null);
+        if (!f) return false;
+        f.focus();
+        f.setAttribute('data-kbd-seen', '1');
+        return true;
+      },
+      { sel: itemSelector, focusable: FOCUSABLE }
+    );
+
+    if (started) {
+      const seq: number[] = [0];
+      const budget = await page.locator(FOCUSABLE).count();
+      for (let i = 0; i < budget; i++) {
+        await page.keyboard.press('Tab');
+        const info = await page.evaluate((sel) => {
+          const a = document.activeElement as HTMLElement | null;
+          if (!a || a === document.body) return { idx: -1, repeat: false };
+          const repeat = a.hasAttribute('data-kbd-seen');
+          a.setAttribute('data-kbd-seen', '1');
+          const items = Array.from(document.querySelectorAll(sel));
+          return { idx: items.findIndex((it) => it === a || it.contains(a)), repeat };
+        }, itemSelector);
+        if (info.repeat) break;                    // tab пошёл по второму кругу
+        if (info.idx !== -1) seq.push(info.idx);
+        if (info.idx === countAfter - 1) break;    // дошли до последнего элемента
+      }
+      for (let i = 1; i < seq.length; i++) {
+        if (seq[i] < seq[i - 1]) {
+          types.push('tab_order_not_monotonic');
+          break;
+        }
       }
     }
   }

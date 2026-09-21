@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "selftest": "tsx src/selftest.ts",
+    "detect": "tsx src/run.ts",
+    "axe": "tsx src/comparison/runAxe.ts",
+    "evaluate": "tsx src/metrics/evaluate.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,8 +17,7 @@
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.20.2",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.23.13",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }
