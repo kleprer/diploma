@@ -26,3 +26,29 @@ export async function getFocusSnapshot(page: Page): Promise<FocusSnapshot> {
         };
     });
 }
+
+export async function waitForFocusToSettle(
+  page: Page,
+  quietMs = 300,
+  timeoutMs = 3000
+): Promise<void> {
+  await page.evaluate(
+    ({ quietMs, timeoutMs }) =>
+      new Promise<void>((resolve) => {
+        let last = document.activeElement;
+        const start = performance.now();
+        let lastChange = start;
+        const tick = () => {
+          const now = performance.now();
+          if (document.activeElement !== last) {
+            last = document.activeElement;
+            lastChange = now;
+          }
+          if (now - lastChange >= quietMs || now - start >= timeoutMs) resolve();
+          else setTimeout(tick, 50);
+        };
+        tick();
+      }),
+    { quietMs, timeoutMs }
+  );
+}

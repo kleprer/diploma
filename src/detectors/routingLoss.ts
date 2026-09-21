@@ -1,48 +1,41 @@
 import { Page } from 'playwright';
-import { getFocusSnapshot, FocusSnapshot } from '../core/focusState';
+import { getFocusSnapshot, waitForFocusToSettle } from '../core/focusState';
+import type { Hooks, ScenarioOutcome } from '../core/types';
 
-export interface RoutingViolation {
-    linkHref: string;
-    before: FocusSnapshot;
-    after: FocusSnapshot;
-    reason: string;
-}
+export async function checkRoutingScenario(
+    page: Page,
+    startUrl: string,
+    linkSelector: string,
+    hooks?: Hooks,
+): Promise<ScenarioOutcome> {
+    await page.goto(startUrl, { waitUntil: 'networkidle' });
 
-export async function detectRoutingFocusLoss(page: Page, baseUrl: string): Promise<RoutingViolation[]> {
-    const violations: RoutingViolation[] = [];
+    const link = page.locator(linkSelector).first();
+    if ((await link.count()) === 0) return { verdict: 'error', details: 'selector_not_found' };
 
-    // сбор внутренних ссылок
-    const links = await page.$$eval('a[href]', (els, base) =>
-        els
-        .map((el) => (el as HTMLAnchorElement).href)
-        .filter((href) => href.startsWith(base) && !href.includes('#')),
-    baseUrl
-    );
+    await link.evaluate((el) => el.setAttribute('data-kbd-trigger', '1'));
+    await link.focus();
 
-    for (const href of links.slice(0,20)) {
-        await page.goto(baseUrl);
-        await page.waitForLoadState('networkidle');
+    const urlBefore = page.url();
+    await page.keyboard.press('Enter');
+    await waitForFocusToSettle(page);
 
-        const linkSelector = `a[href="${href}"]`;
-        const linkExists = await page.$(linkSelector);
-        if (!linkExists) continue;
-
-        await page.click(linkSelector);
-        await page.waitForTimeout(500); // на отрисовку react
-
-        const after = await getFocusSnapshot(page);
-
-        // проверка нарушения фокуса
-        if (after.isBody || !after.isConnected) {
-            violations.push({
-                linkHref: href,
-                before: { tag: 'A', role: null, text: null, isBody: false, isConnected: true, boundingBox: null},
-                after,
-                reason: after.isBody ? 'focus_reset_to_body' : ' focus_on_detached_element',
-            });
-        }
-
+    if (page.url() === urlBefore) {
+        return { verdict: 'not_applicable', details: 'url_did_not_change' };
     }
 
-    return violations;
+    await hooks?.afterAction?.(page);
+
+    const after = await getFocusSnapshot(page);
+    const stayedOnTrigger = await page.evaluate(
+        () => document.activeElement?.hasAttribute('data-kbd-trigger') ?? false
+    );
+
+    const types: string[] = [];
+    if (after.isBody || !after.isConnected) types.push('focus_reset_to_body');
+    else if (stayedOnTrigger) types.push('focus_stayed_on_trigger');
+
+    return types.length
+    ? { verdict: 'violation', violationTypes: types, details: after}
+    : { verdict: 'ok', details: after}
 }

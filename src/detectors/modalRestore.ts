@@ -1,62 +1,70 @@
 import { Page } from 'playwright';
-import { getFocusSnapshot, FocusSnapshot } from '../core/focusState';
+import { waitForFocusToSettle } from '../core/focusState';
+import { DIALOG, FOCUSABLE } from '../core/selectors';
+import type { Hooks, ScenarioOutcome } from '../core/types';
+import { HookOptions } from 'node:test';
 
-export interface ModalViolation {
-    triggerSelector: string;
-    stage: 'focus_not_moved_into_modal' | 'focus_not_restored' | 'no_focus_trap';
-    before: FocusSnapshot;
-    after: FocusSnapshot;
-}
-
-export async function detectModalFocusIssues(
+export async function checkModalScenario(
     page: Page,
-    triggerSelectors: string[]
-): Promise<ModalViolation[]> {
-    const violations: ModalViolation[] = [];
+    startUrl: string,
+    triggerSelector: string,
+    hooks?: Hooks
+): Promise<ScenarioOutcome> {
+    await page.goto(startUrl, { waitUntil: 'networkidle' });
 
-    for (const selector of triggerSelectors) {
-        const trigger = await page.$(selector);
-        if (!trigger) continue;
+    const trigger = page.locator(triggerSelector).first();
+    if ((await trigger.count()) === 0) return { verdict: 'error', details: 'selector_not_found' };
+    
+    await trigger.evaluate((el) => el.setAttribute('data-kdb-trigger', '1'));
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    await waitForFocusToSettle(page);
 
-        await trigger.focus();
-        const before = await getFocusSnapshot(page);
+    const dialog = page.locator(DIALOG).first();
+    if ((await dialog.count()) === 0) return { verdict: 'not_applicable', details: 'no_dialog_opened' };
+    await hooks?.afterAction?.(page);
 
-        await trigger.click();
-        await page.waitForTimeout(300); // на отрисовку react
+    const types: string[] = [];
+    const focusIsInside = () => dialog.evaluate((d) => d.contains(document.activeElement));
 
-        // есть ли на странице элемент с role = 'dialogue'?
-        const dialog = await page.$('[role="dialogue", [role="alertdialogue"]');
-        const afterOpen = await getFocusSnapshot(page);
+    // критерий 1: фокус ушел внутрь диалога
+    if (!(await focusIsInside())) types.push('focus_not_moved_into_modal');
 
-        if (!dialog) {
-            continue;
-        }
-
-        // проверяем, что фокус переместился внутрь диалога
-        const focusInsideDialog = await page.evaluate(() => {
-            const dlg = document.querySelector('[role="dialog", [role="alertdialogue"]');
-            return dlg ? dlg.contains(document.activeElement) : false;
-        });
-
-        if (!focusInsideDialog) {
-            violations.push({ triggerSelector: selector, stage: 'focus_not_moved_into_modal', before, after: afterOpen });
-        }
-
-        // закрытие через escape
-        await page.keyboard.press('Escape');
-        await page.waitForTimeout(300);
-
-        const afterClose = await getFocusSnapshot(page);
-
-        const restoredCorrectly = await page.evaluate((sel) => {
-            const trig = document.querySelector(sel);
-            return trig === document.activeElement;
-        }, selector);
-
-        if (!restoredCorrectly) {
-            violations.push({triggerSelector: selector, stage: 'focus_not_restored', before, after: afterClose});
-        }
+    // критерий 2: tab не выводит за пределы диалога    
+    const focusableCount = await dialog.evaluate(
+        (d, sel) => d.querySelectorAll(sel).length,
+        FOCUSABLE
+    );
+    let escaped = false;
+    for (let i = 0; i < focusableCount + 2 && !escaped; i++) {
+        await page.keyboard.press('Tab');
+        if (!(await focusIsInside())) escaped = true;
     }
+    if (escaped) types.push('no_focus_trap');
 
-    return violations;
+    // возвращение фокуса внутрь
+    await dialog.evaluate((d,sel) => {
+        const f = (d.querySelector(sel) as HTMLElement | null) ?? (d as HTMLElement);
+        f.focus();
+    }, FOCUSABLE);
+
+    await page.keyboard.press('Escape');
+    await waitForFocusToSettle(page);
+
+    const stillOpen = (await page.locator(DIALOG).count()) > 0;
+    if (stillOpen) {
+        const note = {note: 'not_closable_by_escape_restore_not_checked' };
+        return types.length
+        ? { verdict: 'violation', violationTypes: types, details: note}
+        : { verdict: 'ok', details: note};
+    }
+  
+    // критерий 3: фокус вернулся на триггер
+    const restored = await page.evaluate(() => {
+        const t = document.querySelector('[data-kbd-trigger]');
+        return !!t && t === document.activeElement;
+    });
+    if (!restored) types.push('focus_not_restored');
+
+    return types.length ? { verdict: 'violation', violationTypes: types } : { verdict: 'ok' };
 }
