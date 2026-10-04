@@ -9,12 +9,27 @@ export async function runScenario(
   s: Scenario,
   hooks?: Hooks
 ): Promise<ScenarioOutcome> {
+  let result: ScenarioOutcome;
   switch (s.pattern) {
     case 'routing':
-      return checkRoutingScenario(page, s.startUrl, s.selector!, hooks);
+      result = await checkRoutingScenario(page, s.startUrl, s.selector!, hooks);
+      break;
     case 'modal':
-      return checkModalScenario(page, s.startUrl, s.selector!, hooks);
+      result = await checkModalScenario(page, s.startUrl, s.selector!, hooks);
+      break;
     case 'dynamic':
-      return checkDynamicScenario(page, s.startUrl, s.itemSelector!, s.loadMoreSelector, hooks);
+      result = await checkDynamicScenario(page, s.startUrl, s.itemSelector!, s.loadMoreSelector, hooks);
+      break;
   }
+
+  if (result.verdict === 'error') {
+    try {
+      const fs = await import('fs');
+      fs.mkdirSync('data/debug', { recursive: true });
+      await page.screenshot({ path: `data/debug/${s.id}.png` });
+    } catch {
+    }
+  }
+
+  return result;
 }

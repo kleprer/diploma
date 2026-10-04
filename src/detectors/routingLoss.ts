@@ -8,11 +8,15 @@ export async function checkRoutingScenario(
     linkSelector: string,
     hooks?: Hooks,
 ): Promise<ScenarioOutcome> {
-    await page.goto(startUrl, { waitUntil: 'networkidle' });
+    await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
 
     const link = page.locator(linkSelector).first();
-    if ((await link.count()) === 0) return { verdict: 'error', details: 'selector_not_found' };
-
+    try {
+        await link.waitFor({ state: 'visible', timeout: 10000 });
+    } catch {
+        return { verdict: 'error', details: 'selector_not_found' };
+    }
+    
     await link.evaluate((el) => el.setAttribute('data-kbd-trigger', '1'));
     await link.focus();
 

@@ -10,11 +10,14 @@ export async function checkDynamicScenario(
     loadMoreSelector?: string,
     hooks?: Hooks
 ): Promise<ScenarioOutcome> {
-    await page.goto(startUrl, { waitUntil: 'networkidle'});
+    await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
 
-    const countBefore = await page.locator(itemSelector).count();
-    if (countBefore === 0) return { verdict: 'error', details: 'item_selector_not_found' };
-
+    try {
+      await page.locator(itemSelector).first().waitFor({ state: 'visible', timeout: 10000 });
+    } catch {
+      return { verdict: 'error', details: 'item_selector_not_found' };
+    }
+const countBefore = await page.locator(itemSelector).count();
     if (loadMoreSelector) {
         // кнопка "показать еще"
         const btn = page.locator(loadMoreSelector).first();

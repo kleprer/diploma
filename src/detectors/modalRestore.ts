@@ -10,10 +10,14 @@ export async function checkModalScenario(
     triggerSelector: string,
     hooks?: Hooks
 ): Promise<ScenarioOutcome> {
-    await page.goto(startUrl, { waitUntil: 'networkidle' });
+    await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
 
     const trigger = page.locator(triggerSelector).first();
-    if ((await trigger.count()) === 0) return { verdict: 'error', details: 'selector_not_found' };
+    try {
+        await trigger.waitFor({ state: 'visible', timeout: 10000 });
+    } catch {
+        return { verdict: 'error', details: 'selector_not_found' };
+    }
     
     await trigger.evaluate((el) => el.setAttribute('data-kbd-trigger', '1'));
     await trigger.focus();

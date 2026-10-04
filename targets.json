@@ -1,16 +1,17 @@
 [
   {
-    "name": "RealWorld Conduit",
-    "url": "http://localhost:4100",
-    "repo": "https://github.com/gothinkster/react-redux-realworld-example-app",
-    "modalTriggers": [],
-    "listSelector": ".article-preview"
-  },
-  {
+    "id": "react-admin",
     "name": "React-Admin Demo",
-    "url": "http://localhost:3000",
     "repo": "https://github.com/marmelab/react-admin",
-    "modalTriggers": ["[aria-label='Edit']"],
-    "listSelector": ".RaDatagrid-row"
+    "storageState": "data/auth/react-admin.json",
+    "scenarios": [
+      {
+        "id": "routing-01",
+        "pattern": "routing",
+        "description": "Клик по первой карточке товара открывает страницу редактирования",
+        "startUrl": "https://marmelab.com/react-admin-demo/#/products",
+        "selector": "a[href*=\"#/products/\"]:not([href*=\"/create\"]) >> nth=0"
+      }
+    ]
   }
 ]

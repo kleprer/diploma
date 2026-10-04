@@ -13,11 +13,12 @@ export interface Scenario {
     loadMoreSelector?: string;
 }
 
-export interface AppTarger {
+export interface AppTarget {
     id: string;
     name: string;
     repo?: string;
-    scenatios: Scenario[];
+    storageState?: string;
+    scenarios: Scenario[];
 }
 
 export interface ScenarioOutcome {

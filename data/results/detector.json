@@ -1,0 +1,25 @@
+[
+  {
+    "app": "react-admin",
+    "pattern": "routing",
+    "scenarioId": "routing-01",
+    "verdict": "violation",
+    "violationTypes": [
+      "focus_stayed_on_trigger"
+    ],
+    "details": {
+      "tag": "A",
+      "role": null,
+      "text": "Aerial Coast32.09x32.36, $57.42",
+      "isBody": false,
+      "isConnected": true,
+      "boundingBox": {
+        "x": 464,
+        "y": 96
+      }
+    },
+    "stability": 0.6666666666666666,
+    "runs": 3,
+    "durationMs": 10107
+  }
+]
