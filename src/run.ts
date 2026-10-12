@@ -73,7 +73,17 @@ function majority(outcomes: ScenarioOutcome[]) {
             );
         }
     }
-    fs.mkdirSync('data/results', { recursive: true});
-    fs.writeFileSync(path.join('data/results', 'detector.json'), JSON.stringify(results, null, 2));
+    const resultsPath = path.join('data/results', 'detector.json');
+    let previous: ScenarioResult[] = [];
+    if (fs.existsSync(resultsPath)) {
+      previous = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+    }
+    // убираем старые записи по тем же app+scenarioId, что мы сейчас перепрогнали
+    const key = (r: ScenarioResult) => `${r.app}|${r.scenarioId}`;
+    const newKeys = new Set(results.map(key));
+    const merged = [...previous.filter((r) => !newKeys.has(key(r))), ...results];
+
+    fs.mkdirSync('data/results', { recursive: true });
+    fs.writeFileSync(resultsPath, JSON.stringify(merged, null, 2));
     await browser.close();
 })();

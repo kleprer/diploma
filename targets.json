@@ -13,5 +13,40 @@
         "selector": "a[href*=\"#/products/\"]:not([href*=\"/create\"]) >> nth=0"
       }
     ]
+  },
+  {
+    "id": "modal-fixture",
+    "name": "Modal fixture (Radix vs manual)",
+    "repo": "built locally: @radix-ui/react-dialog vs hand-written dialog",
+    "scenarios": [
+      {
+        "id": "modal-good",
+        "pattern": "modal",
+        "description": "Открытие диалога через Radix Dialog",
+        "startUrl": "http://localhost:5173/",
+        "selector": "[data-testid=\"good-trigger\"]"
+      },
+      {
+        "id": "modal-bad",
+        "pattern": "modal",
+        "description": "Открытие вручную написанного диалога без управления фокусом",
+        "startUrl": "http://localhost:5173/",
+        "selector": "[data-testid=\"bad-trigger\"]"
+      }
+    ]
+  },
+  {
+    "id": "feed-fixture",
+    "name": "Infinite scroll fixture (react-infinite-scroll-component)",
+    "repo": "built locally using react-infinite-scroll-component",
+    "scenarios": [
+      {
+        "id": "dynamic-01",
+        "pattern": "dynamic",
+        "description": "Подгрузка элементов при прокрутке вниз",
+        "startUrl": "http://localhost:5175/",
+        "itemSelector": ".item"
+      }
+    ]
   }
 ]
