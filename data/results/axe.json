@@ -1,0 +1,50 @@
+[
+  {
+    "app": "feed-fixture",
+    "pattern": "dynamic",
+    "scenarioId": "dynamic-01",
+    "hookCalled": true,
+    "flaggedAll": true,
+    "flaggedFocus": true,
+    "newRules": [
+      "focus-order-semantics"
+    ]
+  },
+  {
+    "app": "react-admin",
+    "pattern": "routing",
+    "scenarioId": "routing-01",
+    "hookCalled": true,
+    "flaggedAll": true,
+    "flaggedFocus": false,
+    "newRules": [
+      "aria-prohibited-attr",
+      "aria-required-parent",
+      "color-contrast",
+      "image-redundant-alt",
+      "label-content-name-mismatch",
+      "list",
+      "page-has-heading-one"
+    ]
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-good",
+    "hookCalled": true,
+    "flaggedAll": false,
+    "flaggedFocus": false,
+    "newRules": []
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-bad",
+    "hookCalled": true,
+    "flaggedAll": true,
+    "flaggedFocus": false,
+    "newRules": [
+      "aria-dialog-name"
+    ]
+  }
+]
