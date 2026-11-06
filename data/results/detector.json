@@ -1,28 +1,5 @@
 [
   {
-    "app": "react-admin",
-    "pattern": "routing",
-    "scenarioId": "routing-01",
-    "verdict": "violation",
-    "violationTypes": [
-      "focus_stayed_on_trigger"
-    ],
-    "details": {
-      "tag": "A",
-      "role": null,
-      "text": "Aerial Coast16.32x33.67, $28.82",
-      "isBody": false,
-      "isConnected": true,
-      "boundingBox": {
-        "x": 464,
-        "y": 96
-      }
-    },
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 15735
-  },
-  {
     "app": "modal-fixture",
     "pattern": "modal",
     "scenarioId": "modal-good",
@@ -58,5 +35,28 @@
     "stability": 1,
     "runs": 3,
     "durationMs": 4072
+  },
+  {
+    "app": "react-admin",
+    "pattern": "routing",
+    "scenarioId": "routing-01",
+    "verdict": "violation",
+    "violationTypes": [
+      "focus_stayed_on_trigger"
+    ],
+    "details": {
+      "tag": "A",
+      "role": null,
+      "text": "Aerial Coast36.1x13.91, $32.89",
+      "isBody": false,
+      "isConnected": true,
+      "boundingBox": {
+        "x": 464,
+        "y": 96
+      }
+    },
+    "stability": 0.6666666666666666,
+    "runs": 3,
+    "durationMs": 9013
   }
 ]

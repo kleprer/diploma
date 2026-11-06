@@ -64,10 +64,10 @@ export async function checkModalScenario(
     }
   
     // критерий 3: фокус вернулся на триггер
-    console.log('DEBUG', await page.evaluate(() => ({
-        active: document.activeElement?.outerHTML.slice(0, 80),
-        triggerFound: !!document.querySelector('[data-kbd-trigger]'),
-    })));
+    // console.log('DEBUG', await page.evaluate(() => ({
+    //     active: document.activeElement?.outerHTML.slice(0, 80),
+    //     triggerFound: !!document.querySelector('[data-kbd-trigger]'),
+    // })));
     
     const restored = await page.evaluate(() => {
         const t = document.querySelector('[data-kbd-trigger]');

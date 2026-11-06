@@ -79,6 +79,8 @@ const pages: Record<string, string> = {
   '/modal-bad': modalPage(false),
   '/dynamic-good': dynamicPage(true),
   '/dynamic-bad': dynamicPage(false),
+  '/mpa-1': `<!doctype html><title>1</title><body><a id="go" href="/mpa-2">Go</a></body>`,
+  '/mpa-2': `<!doctype html><title>2</title><body><h1>Page 2</h1></body>`,
 };
 
 // ---------- Ожидаемые вердикты ----------
@@ -86,7 +88,7 @@ const B = 'http://fixture.test';
 const cases: {
   name: string;
   run: (p: Page) => Promise<ScenarioOutcome>;
-  expect: 'ok' | 'violation';
+  expect: 'ok' | 'violation' | 'not_applicable';
 }[] = [
   { name: 'routing-good', expect: 'ok', run: (p) => checkRoutingScenario(p, `${B}/routing-good`, '#go') },
   { name: 'routing-bad', expect: 'violation', run: (p) => checkRoutingScenario(p, `${B}/routing-bad`, '#go') },
@@ -94,6 +96,7 @@ const cases: {
   { name: 'modal-bad', expect: 'violation', run: (p) => checkModalScenario(p, `${B}/modal-bad`, '#open') },
   { name: 'dynamic-good', expect: 'ok', run: (p) => checkDynamicScenario(p, `${B}/dynamic-good`, '.item', '#more') },
   { name: 'dynamic-bad', expect: 'violation', run: (p) => checkDynamicScenario(p, `${B}/dynamic-bad`, '.item', '#more') },
+  { name: 'routing-mpa', expect: 'not_applicable', run: (p) => checkRoutingScenario(p, `${B}/mpa-1`, '#go') },
 ];
 
 (async () => {
@@ -116,7 +119,7 @@ const cases: {
     console.log(
       `${ok ? 'PASS' : 'FAIL'}  ${c.name}: ожидали ${c.expect}, получили ${out.verdict}`,
       out.violationTypes ?? '',
-      ok ? '' : out.details ?? ''
+      ok && out.verdict !== 'not_applicable' ? '' : out.details ?? ''
     );
     await context.close();
   }
