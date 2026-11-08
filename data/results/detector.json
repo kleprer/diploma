@@ -1,33 +1,5 @@
 [
   {
-    "app": "modal-fixture",
-    "pattern": "modal",
-    "scenarioId": "modal-good",
-    "verdict": "violation",
-    "violationTypes": [
-      "no_focus_trap"
-    ],
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 2849
-  },
-  {
-    "app": "modal-fixture",
-    "pattern": "modal",
-    "scenarioId": "modal-bad",
-    "verdict": "violation",
-    "violationTypes": [
-      "focus_not_moved_into_modal",
-      "no_focus_trap"
-    ],
-    "details": {
-      "note": "not_closable_by_escape_restore_not_checked"
-    },
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 2577
-  },
-  {
     "app": "feed-fixture",
     "pattern": "dynamic",
     "scenarioId": "dynamic-01",
@@ -58,5 +30,30 @@
     "stability": 0.6666666666666666,
     "runs": 3,
     "durationMs": 9013
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-good",
+    "verdict": "ok",
+    "stability": 1,
+    "runs": 3,
+    "durationMs": 3352
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-bad",
+    "verdict": "violation",
+    "violationTypes": [
+      "focus_not_moved_into_modal",
+      "focus_leaks_out_of_modal"
+    ],
+    "details": {
+      "note": "not_closable_by_escape_restore_not_checked"
+    },
+    "stability": 1,
+    "runs": 3,
+    "durationMs": 3103
   }
 ]
