@@ -39,23 +39,23 @@
     "scenarioId": "routing-01",
     "verdict": "violation",
     "violationTypes": [
-      "focus_stayed_on_trigger"
+      "focus_reset_to_body"
     ],
     "details": {
-      "tag": "A",
+      "tag": "BODY",
       "role": null,
-      "text": "Aerial Coast36.1x21.75, $44.67",
-      "isBody": false,
+      "text": "You need to enable JavaScript to run this app. \n  ",
+      "isBody": true,
       "isConnected": true,
       "boundingBox": {
-        "x": 464,
-        "y": 96
+        "x": 0,
+        "y": 0
       },
-      "titleChanged": false,
+      "titleChanged": true,
       "liveRegionUpdated": false
     },
     "stability": 1,
     "runs": 3,
-    "durationMs": 11125
+    "durationMs": 16841
   }
 ]

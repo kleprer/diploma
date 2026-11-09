@@ -64,7 +64,14 @@ export async function checkRoutingScenario(
     if (!sameDocument) {
         return { verdict: 'not_applicable', details: 'full_page_navigation' };
     }
-
+    
+    // даём приложению время отреагировать: ждём, пока фокус уйдёт с триггера
+    // или триггер исчезнет (до 2 с). Иначе экран, который грузится асинхронно,
+    // даёт ложный результат (проверка идёт по старому экрану).
+    await page.waitForFunction(() => {
+        const t = document.querySelector('[data-kbd-trigger]');
+        return !t || !t.isConnected || document.activeElement !== t;
+    }, undefined, { timeout: 2000 }).catch(() => {});
     await waitForFocusToSettle(page);
     await hooks?.afterAction?.(page);
 
