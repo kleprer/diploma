@@ -5,10 +5,6 @@ import type { Hooks, ScenarioOutcome } from '../core/types';
 /**
  * Проверка клиентской навигации.
  * Вердикт строится только по фокусу (перенос фокуса в новый контент).
- * Дополнительно в details записываются признаки компенсирующего объявления:
- *  - titleChanged: сменился document.title;
- *  - liveRegionUpdated: изменился текст в aria-live / role=status|alert|log.
- * Эти признаки пока НЕ влияют на вердикт: политику обсуждаем с научным руководителем.
  */
 export async function checkRoutingScenario(
     page: Page,
@@ -25,26 +21,11 @@ export async function checkRoutingScenario(
         return { verdict: 'error', details: 'selector_not_found' };
     }
 
-    // метки: «это триггер», «это тот же документ», исходный title, журнал live-регионов
+    // метки: «это триггер», «это тот же документ»
     await link.evaluate((el) => el.setAttribute('data-kbd-trigger', '1'));
     await page.evaluate(() => {
         const w = window as any;
         w.__kbd_marker = 1;
-        w.__kbd_titleBefore = document.title;
-        w.__kbd_live = [];
-        const sel = '[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"], [role="log"]';
-        new MutationObserver((muts) => {
-            for (const m of muts) {
-                const el = m.target instanceof Element ? m.target : m.target.parentElement;
-                const region = el ? el.closest(sel) : null;
-                if (region) w.__kbd_live.push((region.textContent || '').trim().slice(0, 80));
-                for (const n of Array.from(m.addedNodes)) {
-                    if (n instanceof Element && (n.matches(sel) || n.querySelector(sel))) {
-                        w.__kbd_live.push((n.textContent || '').trim().slice(0, 80));
-                    }
-                }
-            }
-        }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
     });
     await link.focus();
 
@@ -77,12 +58,9 @@ export async function checkRoutingScenario(
 
     const after = await getFocusSnapshot(page);
     const extra = await page.evaluate(() => {
-        const w = window as any;
         const a = document.activeElement;
         return {
             stayedOnTrigger: !!a && a.hasAttribute('data-kbd-trigger'),
-            titleChanged: document.title !== w.__kbd_titleBefore,
-            liveRegionUpdated: Array.isArray(w.__kbd_live) && w.__kbd_live.length > 0,
         };
     });
 
@@ -92,8 +70,6 @@ export async function checkRoutingScenario(
 
     const details = {
         ...after,
-        titleChanged: extra.titleChanged,
-        liveRegionUpdated: extra.liveRegionUpdated,
     };
 
     return types.length
