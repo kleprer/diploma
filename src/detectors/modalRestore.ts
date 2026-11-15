@@ -75,7 +75,9 @@ export async function checkModalScenario(
     // критерий 3: фокус вернулся на триггер
     const restored = await page.evaluate(() => {
         const t = document.querySelector('[data-kbd-trigger]');
-        return !!t && t === document.activeElement;
+        const a = document.activeElement as HTMLElement | null;
+        if (t) return t === a;
+        return !!a && a !== document.body && a.isConnected;
     });
     if (!restored) types.push('focus_not_restored');
 

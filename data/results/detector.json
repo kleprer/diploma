@@ -15,7 +15,7 @@
     "verdict": "ok",
     "stability": 1,
     "runs": 3,
-    "durationMs": 3352
+    "durationMs": 3297
   },
   {
     "app": "modal-fixture",
@@ -31,7 +31,7 @@
     },
     "stability": 1,
     "runs": 3,
-    "durationMs": 3103
+    "durationMs": 2612
   },
   {
     "app": "react-admin",
@@ -50,12 +50,10 @@
       "boundingBox": {
         "x": 0,
         "y": 0
-      },
-      "titleChanged": true,
-      "liveRegionUpdated": false
+      }
     },
-    "stability": 1,
+    "stability": 0.6666666666666666,
     "runs": 3,
-    "durationMs": 16841
+    "durationMs": 15377
   }
 ]
