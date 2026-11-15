@@ -214,14 +214,14 @@
     "tool": "axe_all",
     "pattern": "dynamic",
     "TP": 0,
-    "FP": 1,
+    "FP": 0,
     "FN": 0,
-    "TN": 0,
+    "TN": 1,
     "excluded": 0,
-    "precision": 0,
+    "precision": null,
     "precision_ci": [
-      0,
-      0.7934567085261071
+      null,
+      null
     ],
     "recall": null,
     "recall_ci": [
@@ -235,21 +235,21 @@
     "tool": "axe_all",
     "pattern": "ALL",
     "TP": 1,
-    "FP": 1,
+    "FP": 0,
     "FN": 0,
-    "TN": 1,
+    "TN": 2,
     "excluded": 0,
-    "precision": 0.5,
+    "precision": 1,
     "precision_ci": [
-      0.09452865480086614,
-      0.9054713451991339
+      0.20654329147389294,
+      1
     ],
     "recall": 1,
     "recall_ci": [
       0.20654329147389294,
       1
     ],
-    "f1": 0.6666666666666666
+    "f1": 1
   },
   {
     "set": "fixture",
@@ -277,14 +277,14 @@
     "tool": "axe_focus",
     "pattern": "dynamic",
     "TP": 0,
-    "FP": 1,
+    "FP": 0,
     "FN": 0,
-    "TN": 0,
+    "TN": 1,
     "excluded": 0,
-    "precision": 0,
+    "precision": null,
     "precision_ci": [
-      0,
-      0.7934567085261071
+      null,
+      null
     ],
     "recall": null,
     "recall_ci": [
@@ -298,14 +298,14 @@
     "tool": "axe_focus",
     "pattern": "ALL",
     "TP": 0,
-    "FP": 1,
+    "FP": 0,
     "FN": 1,
-    "TN": 1,
+    "TN": 2,
     "excluded": 0,
-    "precision": 0,
+    "precision": null,
     "precision_ci": [
-      0,
-      0.7934567085261071
+      null,
+      null
     ],
     "recall": 0,
     "recall_ci": [

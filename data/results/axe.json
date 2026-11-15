@@ -1,16 +1,5 @@
 [
   {
-    "app": "feed-fixture",
-    "pattern": "dynamic",
-    "scenarioId": "dynamic-01",
-    "hookCalled": true,
-    "flaggedAll": true,
-    "flaggedFocus": true,
-    "newRules": [
-      "focus-order-semantics"
-    ]
-  },
-  {
     "app": "react-admin",
     "pattern": "routing",
     "scenarioId": "routing-01",
@@ -18,12 +7,12 @@
     "flaggedAll": true,
     "flaggedFocus": false,
     "newRules": [
+      "aria-progressbar-name",
       "aria-prohibited-attr",
       "aria-required-parent",
       "color-contrast",
       "image-redundant-alt",
       "label-content-name-mismatch",
-      "list",
       "page-has-heading-one"
     ]
   },
@@ -46,5 +35,14 @@
     "newRules": [
       "aria-dialog-name"
     ]
+  },
+  {
+    "app": "feed-fixture",
+    "pattern": "dynamic",
+    "scenarioId": "dynamic-01",
+    "hookCalled": false,
+    "flaggedAll": false,
+    "flaggedFocus": false,
+    "newRules": []
   }
 ]

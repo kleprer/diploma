@@ -1,5 +1,3 @@
 set,tool,app,pattern,scenario_id,kind,gt_type,notes
 real,axe_focus,react-admin,routing,routing-01,FN,focus_reset_to_body,"после Enter document.activeElement = body; повторный Tab начинает обход заново с начала страницы"
 fixture,axe_focus,modal-fixture,modal,modal-bad,FN,focus_not_moved_into_modal;focus_leaks_out_of_modal;focus_reset_to_body,"ручная проверка: диалог не реагирует на Escape (обработчика нет), закрыт кликом по кнопке Close — после этого фокус ушёл на body. Детектор проверяет закрытие только через Escape и для этого сценария не доходит до проверки восстановления фокуса — известное ограничение методологии"
-fixture,axe_all,feed-fixture,dynamic,dynamic-01,FP,,"фокус не теряется при подгрузке (остаётся на последнем элементе предыдущей партии); следующий Tab переходит на следующий по порядку новый элемент"
-fixture,axe_focus,feed-fixture,dynamic,dynamic-01,FP,,"фокус не теряется при подгрузке (остаётся на последнем элементе предыдущей партии); следующий Tab переходит на следующий по порядку новый элемент"
