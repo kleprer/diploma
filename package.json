@@ -19,6 +19,7 @@
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.20.2",
     "csv-parse": "^7.0.3",
+    "html_codesniffer": "^2.5.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
