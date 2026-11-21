@@ -58,19 +58,54 @@ async function runRoutingScenario(
     w.__kbd_marker = 1;
     w.__kbd_titleBefore = document.title;
     w.__kbd_live = [];
-    const sel = '[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"], [role="log"]';
+
+    // role="progressbar" и role="marquee" — тоже live-роли по ARIA 1.2,
+    // но с неявным aria-live="polite"; добавляем их в селектор.
+    const sel =
+      '[aria-live]:not([aria-live="off"]), [role="status"], [role="alert"], [role="log"], [role="progressbar"], [role="marquee"]';
+
+    // Вспомогательная функция: извлекаем «объявляемый» текст.
+    // Отбрасываем скрытые поддеревья (display:none, visibility:hidden, aria-hidden=true)
+    // и узлы с aria-busy="true" — в этот момент скринридер молчит.
+    const announceableText = (root: Element): string => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let out = '';
+      let n: Node | null;
+      while ((n = walker.nextNode())) {
+        const el = n.parentElement;
+        if (!el) continue;
+        if (el.closest('[aria-hidden="true"], [aria-busy="true"]')) continue;
+        const cs = getComputedStyle(el);
+        if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+        out += ' ' + (n.textContent || '');
+      }
+      return out.trim().slice(0, 80);
+    };
+
+    const recordIfRegion = (node: Node | null) => {
+      if (!(node instanceof Element)) return;
+      const region = node.closest(sel) || (node.matches(sel) ? node : null);
+      if (!region) return;
+      const text = announceableText(region);
+      // Пустое изменение (текст не поменялся на непустой) не считаем объявлением.
+      if (text.length === 0) return;
+      w.__kbd_live.push(text);
+    };
+
     new MutationObserver((muts) => {
       for (const m of muts) {
-        const el = m.target instanceof Element ? m.target : m.target.parentElement;
-        const region = el ? el.closest(sel) : null;
-        if (region) w.__kbd_live.push((region.textContent || '').trim().slice(0, 80));
-        for (const n of Array.from(m.addedNodes)) {
-          if (n instanceof Element && (n.matches(sel) || n.querySelector(sel))) {
-            w.__kbd_live.push((n.textContent || '').trim().slice(0, 80));
-          }
+        if (m.type === 'characterData') {
+          recordIfRegion(m.target.parentElement);
+        } else {
+          recordIfRegion(m.target instanceof Element ? m.target : m.target.parentElement);
+          for (const n of Array.from(m.addedNodes)) recordIfRegion(n);
         }
       }
-    }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+    }).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
   });
   await link.focus();
 
