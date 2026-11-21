@@ -16,6 +16,7 @@ async function runOnce(browser: Browser, app: AppTarget, s: Scenario): Promise<S
     app.storageState ? { storageState: app.storageState } : {}
   );
   const page = await context.newPage();
+  await page.addInitScript("globalThis.__name = function(fn) { return fn; };");
   try {
     return await runScenario(page, s);
   } catch (e) {

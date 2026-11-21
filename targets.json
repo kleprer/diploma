@@ -44,7 +44,7 @@
         "id": "dynamic-01",
         "pattern": "dynamic",
         "description": "Подгрузка элементов при прокрутке вниз",
-        "startUrl": "http://localhost:5173/",
+        "startUrl": "http://localhost:5174/",
         "itemSelector": ".item"
       }
     ]

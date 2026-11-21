@@ -10,7 +10,9 @@
     "evaluate": "tsx src/metrics/evaluate.ts",
     "login": "tsx src/auth/login.ts",
     "htmlcs": "tsx src/tools/htmlcs.ts",
-    "htmlcs:smoke": "tsx src/tools/htmlcsSmoke.ts"
+    "htmlcs:smoke": "tsx src/tools/htmlcsSmoke.ts",
+    "fixtures": "concurrently -k \"npm --prefix ../modal-fixture run dev -- --port 5173\" \"npm --prefix ../feed-fixture run dev -- --port 5174\"",
+    "detect:all": "wait-on http://localhost:5173 http://localhost:5174 && npm run detect"
   },
   "keywords": [],
   "author": "",
@@ -20,9 +22,11 @@
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.20.2",
+    "concurrently": "^10.0.7",
     "csv-parse": "^7.0.3",
     "html_codesniffer": "^2.5.1",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wait-on": "^9.5.1"
   }
 }
