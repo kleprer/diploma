@@ -1,39 +1,5 @@
 [
   {
-    "app": "feed-fixture",
-    "pattern": "dynamic",
-    "scenarioId": "dynamic-01",
-    "verdict": "ok",
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 4072
-  },
-  {
-    "app": "modal-fixture",
-    "pattern": "modal",
-    "scenarioId": "modal-good",
-    "verdict": "ok",
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 3297
-  },
-  {
-    "app": "modal-fixture",
-    "pattern": "modal",
-    "scenarioId": "modal-bad",
-    "verdict": "violation",
-    "violationTypes": [
-      "focus_not_moved_into_modal",
-      "focus_leaks_out_of_modal"
-    ],
-    "details": {
-      "note": "not_closable_by_escape_restore_not_checked"
-    },
-    "stability": 1,
-    "runs": 3,
-    "durationMs": 2612
-  },
-  {
     "app": "react-admin",
     "pattern": "routing",
     "scenarioId": "routing-01",
@@ -50,10 +16,46 @@
       "boundingBox": {
         "x": 0,
         "y": 0
-      }
+      },
+      "titleChanged": true,
+      "liveRegionUpdated": false
     },
-    "stability": 0.6666666666666666,
+    "stability": 1,
     "runs": 3,
-    "durationMs": 15377
+    "durationMs": 15563
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-good",
+    "verdict": "ok",
+    "stability": 1,
+    "runs": 3,
+    "durationMs": 3641
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-bad",
+    "verdict": "violation",
+    "violationTypes": [
+      "focus_not_moved_into_modal",
+      "focus_leaks_out_of_modal"
+    ],
+    "details": {
+      "note": "not_closable_by_escape_restore_not_checked"
+    },
+    "stability": 1,
+    "runs": 3,
+    "durationMs": 3553
+  },
+  {
+    "app": "feed-fixture",
+    "pattern": "dynamic",
+    "scenarioId": "dynamic-01",
+    "verdict": "ok",
+    "stability": 1,
+    "runs": 3,
+    "durationMs": 2888
   }
 ]
