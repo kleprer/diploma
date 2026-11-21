@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "selftest": "tsx src/selftest.ts",
+    "selftest": "tsx src/selftest/selftest.ts",
     "detect": "tsx src/run.ts",
     "axe": "tsx src/comparison/runAxe.ts",
     "evaluate": "tsx src/metrics/evaluate.ts",
-    "login": "tsx src/auth/login.ts"
+    "login": "tsx src/auth/login.ts",
+    "htmlcs": "tsx src/tools/htmlcs.ts",
+    "htmlcs:smoke": "tsx src/tools/htmlcsSmoke.ts"
   },
   "keywords": [],
   "author": "",
