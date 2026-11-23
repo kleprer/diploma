@@ -43,7 +43,13 @@ async function runModalScenario(
   hooks?: Hooks
 ): Promise<ScenarioOutcome> {
   await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
-
+  const isDeadApp = await page.evaluate(() => {
+    return document.body.textContent?.includes('You need to enable JavaScript') ?? false;
+  });
+  
+  if (isDeadApp) {
+    return { verdict: 'error', details: 'app_failed_to_mount' };
+  }
   const trigger = page.locator(triggerSelector).first();
   try {
     await trigger.waitFor({ state: 'visible', timeout: 10000 });

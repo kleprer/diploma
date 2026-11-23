@@ -12,11 +12,24 @@ const appFilter = process.argv.includes('--app')
     : null;
 
 async function runOnce(browser: Browser, app: AppTarget, s: Scenario): Promise<ScenarioOutcome> {
-  const context = await browser.newContext(
-    app.storageState ? { storageState: app.storageState } : {}
-  );
+  const context = await browser.newContext({
+    storageState: app.storageState ? app.storageState : undefined,
+    bypassCSP: true,
+  });
   const page = await context.newPage();
   await page.addInitScript("globalThis.__name = function(fn) { return fn; };");
+
+  // --- ОТЛАДКА ---
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') console.log(`[CONSOLE ERROR] ${msg.text()}`);
+  });
+  page.on('pageerror', (err) => {
+    console.log(`[JS EXCEPTION] ${err.message}`);
+  });
+  page.on('requestfailed', (req) => {
+    console.log(`[NETWORK FAIL] ${req.url()} - ${req.failure()?.errorText}`);
+  });
+  // -------------
   try {
     return await runScenario(page, s);
   } catch (e) {

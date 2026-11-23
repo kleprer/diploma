@@ -40,9 +40,11 @@ const targets: AppTarget[] = JSON.parse(fs.readFileSync('targets.json', 'utf8'))
       const context = await browser.newContext(
         app.storageState ? { storageState: app.storageState } : {}
       );
+      await context.addInitScript("globalThis.__name = function(fn) { return fn; };");
       const page = await context.newPage();
       try {
-        await page.goto(s.startUrl, { waitUntil: 'load', timeout: 15000 });
+        await page.goto(s.startUrl, { waitUntil: 'networkidle', timeout: 30000 });
+
         const baseline = await axeKeys(page);
 
         let after: Set<string> | null = null;

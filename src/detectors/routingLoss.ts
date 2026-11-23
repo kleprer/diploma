@@ -42,8 +42,14 @@ async function runRoutingScenario(
   linkSelector: string,
   hooks?: Hooks
 ): Promise<ScenarioOutcome> {
-  await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
-
+  await page.goto(startUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  const isDeadApp = await page.evaluate(() => {
+    return document.body.textContent?.includes('You need to enable JavaScript') ?? false;
+  });
+  
+  if (isDeadApp) {
+    return { verdict: 'error', details: 'app_failed_to_mount' };
+  }
   const link = page.locator(linkSelector).first();
   try {
     await link.waitFor({ state: 'visible', timeout: 10000 });

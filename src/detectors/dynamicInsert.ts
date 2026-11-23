@@ -37,7 +37,13 @@ async function runDynamicScenario(
   hooks?: Hooks
 ): Promise<ScenarioOutcome> {
   await page.goto(startUrl, { waitUntil: 'load', timeout: 15000 });
-
+  const isDeadApp = await page.evaluate(() => {
+    return document.body.textContent?.includes('You need to enable JavaScript') ?? false;
+  });
+  
+  if (isDeadApp) {
+    return { verdict: 'error', details: 'app_failed_to_mount' };
+  }
   try {
     await page.locator(itemSelector).first().waitFor({ state: 'visible', timeout: 10000 });
   } catch {
