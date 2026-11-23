@@ -1,16 +1,15 @@
 [
   {
-    "id": "react-admin",
-    "name": "React-Admin Demo",
-    "repo": "https://github.com/marmelab/react-admin",
-    "storageState": "data/auth/react-admin.json",
+    "id": "vue-router-docs",
+    "name": "Vue Router Documentation",
+    "storageState": "",
     "scenarios": [
       {
         "id": "routing-01",
         "pattern": "routing",
-        "description": "Клик по первой карточке товара открывает страницу редактирования",
-        "startUrl": "https://marmelab.com/react-admin-demo/#/products",
-        "selector": "a[href*=\"#/products/\"]:not([href*=\"/create\"]) >> nth=0"
+        "description": "Переход на страницу Guide через History API",
+        "startUrl": "https://router.vuejs.org/",
+        "selector": "a[href='/guide/']"
       }
     ]
   },

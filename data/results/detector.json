@@ -1,28 +1,25 @@
 [
   {
-    "app": "react-admin",
+    "app": "vue-router-docs",
     "pattern": "routing",
     "scenarioId": "routing-01",
-    "verdict": "violation",
-    "violationTypes": [
-      "focus_reset_to_body"
-    ],
+    "verdict": "ok",
     "details": {
-      "tag": "BODY",
+      "tag": "SPAN",
       "role": null,
-      "text": "You need to enable JavaScript to run this app. \n  ",
-      "isBody": true,
+      "text": null,
+      "isBody": false,
       "isConnected": true,
       "boundingBox": {
         "x": 0,
-        "y": 0
+        "y": 72
       },
       "titleChanged": true,
       "liveRegionUpdated": false
     },
-    "stability": 1,
+    "stability": 0.6666666666666666,
     "runs": 3,
-    "durationMs": 15563
+    "durationMs": 21800
   },
   {
     "app": "modal-fixture",
@@ -31,7 +28,7 @@
     "verdict": "ok",
     "stability": 1,
     "runs": 3,
-    "durationMs": 3641
+    "durationMs": 4888
   },
   {
     "app": "modal-fixture",
@@ -47,7 +44,7 @@
     },
     "stability": 1,
     "runs": 3,
-    "durationMs": 3553
+    "durationMs": 4370
   },
   {
     "app": "feed-fixture",
@@ -56,6 +53,6 @@
     "verdict": "ok",
     "stability": 1,
     "runs": 3,
-    "durationMs": 2888
+    "durationMs": 4197
   }
 ]

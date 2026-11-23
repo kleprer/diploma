@@ -1,0 +1,45 @@
+[
+  {
+    "app": "vue-router-docs",
+    "pattern": "routing",
+    "scenarioId": "routing-01",
+    "hookCalled": true,
+    "flaggedAll": true,
+    "newRules": [
+      "WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Abs",
+      "WCAG2AA.Principle1.Guideline1_3.1_3_1_A.G141",
+      "WCAG2AA.Principle1.Guideline1_3.1_3_1.H48",
+      "WCAG2AA.Principle1.Guideline1_1.1_1_1.H37",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.BgImage",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G145.Abs",
+      "WCAG2AA.Principle1.Guideline1_4.1_4_3.G18.Alpha"
+    ]
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-good",
+    "hookCalled": true,
+    "flaggedAll": true,
+    "newRules": [
+      "WCAG2AA.Principle1.Guideline1_4.1_4_10.C32,C31,C33,C38,SCR34,G206"
+    ]
+  },
+  {
+    "app": "modal-fixture",
+    "pattern": "modal",
+    "scenarioId": "modal-bad",
+    "hookCalled": true,
+    "flaggedAll": false,
+    "newRules": []
+  },
+  {
+    "app": "feed-fixture",
+    "pattern": "dynamic",
+    "scenarioId": "dynamic-01",
+    "hookCalled": true,
+    "flaggedAll": false,
+    "newRules": []
+  }
+]
