@@ -27,6 +27,11 @@ function criterionOf(code: string): string | null {
  * Если у контекста не включён bypassCSP, строгий CSP страницы может заблокировать внедрение скрипта.
  */
 export async function runHtmlcs(page: Page): Promise<ToolFinding[]> {
+  await page.addInitScript(() => {
+    // Внутри функции можно использовать глобальный объект window/globalThis
+    (window as any).__name = function (fn: any) { return fn; };
+  });
+
   if (source === null) source = fs.readFileSync(HTMLCS_PATH, 'utf8');
 
   const injected = await page.evaluate(() => typeof (window as any).HTMLCS !== 'undefined');

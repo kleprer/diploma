@@ -9,7 +9,7 @@
     "axe": "tsx src/comparison/runAxe.ts",
     "evaluate": "tsx src/metrics/evaluate.ts",
     "login": "tsx src/auth/login.ts",
-    "htmlcs": "tsx src/tools/htmlcs.ts",
+    "htmlcs": "tsx src/comparison/runHtmlcs.ts",
     "htmlcs:smoke": "tsx src/tools/htmlcsSmoke.ts",
     "fixtures": "concurrently -k \"npm --prefix ../modal-fixture run dev -- --port 5173\" \"npm --prefix ../feed-fixture run dev -- --port 5174\"",
     "detect:all": "wait-on http://localhost:5173 http://localhost:5174 && npm run detect"

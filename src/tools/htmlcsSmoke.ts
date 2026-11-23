@@ -1,5 +1,7 @@
 import { chromium } from 'playwright';
 import { runHtmlcs } from './htmlcs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 async function main() {
   const browser = await chromium.launch({ headless: true });
@@ -22,6 +24,23 @@ async function main() {
   console.log(ok ? 'SMOKE OK: found missing alt (1.1.1)' : 'SMOKE FAIL: expected an error for 1.1.1');
   await browser.close();
   process.exitCode = ok ? 0 : 1;
+
+
+  const reportDir = path.join(process.cwd(), 'reports');
+  if (!fs.existsSync(reportDir)) {
+    fs.mkdirSync(reportDir);
+  }
+
+  const reportPath = path.join(reportDir, `htmlcs-${new Date().toISOString().replace(/:/g, '-')}.json`);
+  const reportData = {
+    pageUrl: page.url(), // URL или 'about:blank' для setContent
+    timestamp: new Date().toISOString(),
+    summary: { error: byType.error, warning: byType.warning, notice: byType.notice },
+    findings: findings,
+  };
+
+  fs.writeFileSync(reportPath, JSON.stringify(reportData, null, 2));
+  console.log(`Report saved to ${reportPath}`);
 }
 
 main();
